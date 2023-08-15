@@ -13,6 +13,8 @@ def draw_lines(x1, y1, x2, y2):
     glVertex2f(x2, y2)
     glEnd()
 
+
+
 def iterate():
     glViewport(0, 0, 1000, 1000)
     glMatrixMode(GL_PROJECTION)
@@ -45,6 +47,11 @@ def showScreen():
     iterate()
     angle = 0
     t = 20
+
+
+
+
+
     while t>=0:
         glutSwapBuffers()
         time.sleep(1)
@@ -57,6 +64,10 @@ def showScreen():
             glutSwapBuffers()
         t -= 1
         angle += 90
+
+
+
+
 
 
 glutInit()
