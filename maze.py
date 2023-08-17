@@ -80,7 +80,6 @@ def draw_maze():
     glColor3f(1, 1, 1)  ### note to Anika.. ekhane checkered finish line banay dio please
     draw_wall(640, 80, 640, 120, 680, 120, 680, 80)
 
-
 # draw cricle
 def drawpoints(x, y):
     glPointSize(1.25)

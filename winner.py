@@ -1,7 +1,6 @@
 from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
-import random
 
 def draw_points(x, y):
     glPointSize(5) #pixel size. by default 1 thake
@@ -9,200 +8,441 @@ def draw_points(x, y):
     glVertex2f(x,y) #jekhane show korbe pixel
     glEnd()
 
-def iterate():
-    glViewport(0, 0, 500, 500)
-    glMatrixMode(GL_PROJECTION)
-    glLoadIdentity()
-    glOrtho(0.0, 500, 0.0, 500, 0.0, 1.0)
-    glMatrixMode (GL_MODELVIEW)
-    glLoadIdentity()
+def find_zone(dx, dy):
 
+    if dx > -1 and dy > -1:
 
+        if abs(dx) >= abs(dy):
 
-def findZone (x1,y1,x2,y2):
-    zone=None
-    dx=x2-x1
-    dy=y2-y1
-
-    if abs(dx)>abs(dy):
-        if abs(dx)>0 & abs(dy>=0):
-            zone=0
-        elif abs(dx)<0 & abs(dy>=0):
-            zone=3
-        elif abs(dx)>0 & abs(dy<=0):
-            zone=7
-        elif abs(dx)<0 & abs(dy<=0):
-            zone=4
-    else:
-        if abs(dx)>=0 & abs(dy>0):
-            zone=1
-        elif abs(dx)<=0 & abs(dy>0):
-            zone=2
-        elif abs(dx)>=0 & abs(dy<0):
-            zone=6
-        elif abs(dx)<=0 & abs(dy<0):
-            zone=5
-
-    return zone
-
-def OriginalZone(X,Y,zone):
-    x=X
-    y=Y
-    if zone==1:
-        x=Y
-        y=X
-    elif zone==2:
-        x=-Y
-        y=X
-    elif zone==3:
-        x=-X
-        y=Y
-    elif zone==4:
-        x=-X
-        y=-Y
-    elif zone==5:
-        x=-Y
-        y=-X
-    elif zone==6:
-        x=Y
-        y=-X
-    elif zone==7:
-        x=X
-        y=-Y
-
-    return (x,y)
-
-def ConvertToZone0(X,Y,zone):
-    x=X
-    y=Y
-    if zone==1:
-        x=Y
-        y=X
-    elif zone==2:
-        x=Y
-        y=-X
-    elif zone==3:
-        x=-X
-        y=Y
-    elif zone==4:
-        x=-X
-        y=-Y
-    elif zone==5:
-        x=-Y
-        y=-X
-    elif zone==6:
-        x=Y
-        y=-X
-    elif zone==7:
-        x=X
-        y=-Y
-
-    return (x,y)
-
-
-def draw_lines (x0,y0,x1,y1):
-    zone=findZone(x0,y0,x1,y1)
-    x0,y0=ConvertToZone0(x0,y0,zone)
-    x1,y1=ConvertToZone0(x1,y1,zone)
-    dx=x1-x0
-    dy=y1-y0
-    d=2*dy - dx
-    E=2*dy
-    NE=2*(dy-dx)
-    x=x0
-    y=y0
-    X,Y=OriginalZone(x,y,zone)
-    draw_points (X,Y)
-    while(x<x1):
-        if d<=0:
-            d=d+E
-            x=x+1
+            return 0
 
         else:
-            d=d+NE
-            x=x+1
-            y=y+1
 
-        X,Y=OriginalZone(x,y,zone)
-        draw_points(X,Y)
+            return 1
 
-def winner(d):
+    elif dx < 0 and dy > -1:
+
+        if abs(dx) < abs(dy):
+
+            return 2
+
+        else:
+
+            return 3
+
+    elif dx < 0 and dy < 0:
+
+        if abs(dx) >= abs(dy):
+
+            return 4
+
+        else:
+
+            return 5
+
+    else:
+
+        if abs(dx) < abs(dy):
+
+            return 6
+
+        else:
+
+            return 7
+
+def zone0_conversion(x1, y1, x2, y2, zone):
+
+
+    if zone == 0:
+
+        x1, y1 = x1, y1
+
+        x2, y2 = x2, y2
+
+    elif zone == 1:
+
+        x1, y1 = y1, x1
+
+        x2, y2 = y2, x2
+
+
+
+    elif zone == 2:
+
+        x1, y1 = y1, -x1
+
+        x2, y2 = y2, -x2
+
+
+
+
+    elif zone == 3:
+
+        x1, y1 = -x1, y1
+
+        x2, y2 = -x2, y2
+
+
+
+    elif zone == 4:
+
+        x1, y1 = -x1, -y1
+
+        x2, y2 = -x2, -y2
+
+
+
+    elif zone == 5:
+
+        x1, y1 = -y1, -x1
+
+        x2, y2 = -y2, -x2
+
+
+    elif zone == 6:
+
+        x1, y1 = -y1, x1
+
+        x2, y2 = -y2, x2
+
+
+    elif zone == 7:
+
+        x1, y1 = x1, -y1
+
+        x2, y2 = x2, -y2
+
+    return x1, y1, x2, y2
+
+
+
+def DrawLine(x1, y1, x2, y2):
+
+    dx = x2 - x1
+
+    dy = y2 - y1
+
+    zone = find_zone(dx, dy)
+
+    x1, y1, x2, y2 = zone0_conversion(x1, y1, x2, y2, zone)
+
+    X0 = []
+
+    Y0 = []
+
+    D = []
+
+
+
+    dx = x2 - x1
+
+    dy = y2 - y1
+
+    d = 2*dy-dx
+
+
+
+    D = D + [d]
+
+    incE = 2 * dy
+
+    incNE = 2 * (dy - dx)
+
+    x = x1
+
+    y = y1
+
+
+    while x<=x2:
+
+        tempx = x
+
+        tempy = y
+
+        X0+=[x]
+
+        Y0 += [y]
+
+        tempx, tempy = convert_to_origin_zone(tempx, tempy, zone)
+
+        draw_points(tempx, tempy)
+
+        x+=1
+
+        if (d > 0):
+
+            d = d + incNE
+
+            y = y + 1
+
+        else:
+
+            d = d + incE
+
+            D+=[d]
+
+def convert_to_origin_zone(x, y, zone):
+
+    if zone == 0:
+
+        return x, y
+
+    elif zone == 1:
+
+        return y, x
+
+    elif zone == 2:
+
+        return -y, x
+
+    elif zone == 3:
+
+        return -x, y
+
+    elif zone == 4:
+
+        return -x, -y
+
+    elif zone == 5:
+
+        return -y, -x
+
+    elif zone == 6:
+
+        return y, -x
+
+    elif zone == 7:
+
+        return x, -y
+
+
+
+# ===========================================================================
+
+
+def top(x):
+
+  DrawLine(x+50, 400, x+100, 400)
+
+def mid(x):
+
+  DrawLine(x+50, 350, x+100, 350)
+
+def bottom(x):
+
+  DrawLine(x+50, 300, x+100, 300)
+
+def left_above(x):
+
+  DrawLine(x+50, 400, x+50, 350)
+
+def left_bottom(x):
+
+  DrawLine(x+50, 350, x+50, 300)
+
+def right_above(x):
+
+  DrawLine(x+100, 400, x+100, 350)
+
+def right_bottom(x):
+
+  DrawLine(x+100, 350, x+100, 300)
+
+def left_above_right_below(x):
+
+  DrawLine(x+50, 400, x+100, 300)
+
+def diagonal_left(x):
+
+  DrawLine(x+50, 300, x+75, 400)
+
+def diagonal_right(x):
+
+  DrawLine(x+100, 300, x+75, 400)
+
+
+def diagonal_left_for_Y(x):
+
+  DrawLine(x+50, 400, x+75, 350)
+
+def diagonal_right_for_Y(x):
+
+  DrawLine(x+100, 400, x+75, 350)
+
+
+def mid_for_Y(x):  
+
+  DrawLine(x+75, 350, x+75, 300)
+
+def only_I(x):
+
+  DrawLine(x+75, 400, x+75, 300)
+
+
+# Output
+
+def output(value, x):
+
+    if value == "O":
+
+        top(x)
+
+        right_above(x)
+
+        right_bottom(x)
+
+        left_above(x)
+
+        left_bottom(x)
+
+        bottom(x)
+
+    elif value == "U":
+
+        right_above(x)
+
+        right_bottom(x)
+
+        left_above(x)
+
+        left_bottom(x)
+
+        bottom(x)
+        
+
+    elif value == "I":
+
+        only_I(x)
+
+    elif value == "N":
+
+        left_above(x)
+
+        left_bottom(x)
+
+        left_above_right_below(x)
+
+        right_above(x)
+
+        right_bottom(x)
+
+        
+
+        
+
+        
+
+    elif value == "W":
+
+        right_above(x)
+
+        right_bottom(x)
+
+        diagonal_left(x)
+
+        diagonal_right(x)
+
+        left_above(x)
+
+        left_bottom(x)                
+
+
+# -----------------------------------------------
+
+    elif value == "Y":
+
+        diagonal_left_for_Y(x)
+
+        diagonal_right_for_Y(x)
+
+        mid_for_Y(x)
+
+    elif value == "S":
+
+        top(x)
+
+        left_above(x)
+
+        mid(x)
+
+        right_bottom(x)
+
+        bottom(x)
+
     
-    y=200
-    x=190
+    elif value == "L":
 
+        left_above(x)
 
-    # # above
-    # draw_lines(x, y+100, x+50, y+100)
+        left_bottom(x)
 
-    # # left
-    # draw_lines(x, y, x, y+100)
-    
-    # # right
-    # draw_lines(x+50, y, x+50, y+100)
+        bottom(x)
 
-    # # below
-    # draw_lines(x, y, x+50, y)
+    elif value == "T":
 
-    
+        top(x)
+
+        only_I(x)
 
 
 
-    # O
 
-    # draw_lines(x, y, x+50, y)
-    # draw_lines(x, y, x, y+100)
-    # draw_lines(x+50, y, x+50, y+100)
-    # draw_lines(x, y+100, x+50, y+100)
-
-    # I
-
-    # draw_lines(x+50, y, x+50, y+100)
-
-    # U
-
-    # draw_lines(x, y, x+50, y)
-    # draw_lines(x, y, x, y+100)
-    # draw_lines(x+50, y, x+50, y+100)
-
-
-
-    # N
-
-    
-
-    draw_lines(x, y, x, y+100)
-
-    
-    draw_lines(x+50, y, x+50, y+100)
+# -------------------------------------------------
 
 
 
 
 
+
+
+# ===========================================================================
+
+
+def iterate():
+   glViewport(0, 0, 500, 500)
+   glMatrixMode(GL_PROJECTION)
+   glLoadIdentity()
+   glOrtho(0.0, 500, 0.0, 500, 0.0, 1.0)
+   glMatrixMode (GL_MODELVIEW)
+   glLoadIdentity()
 
 
 def showScreen():
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) #clears the color and depth buffers using glClear
-    glLoadIdentity() # loads the identity matrix with glLoadIdentity
-    iterate() # sets up the viewport and matrices using iterate
-    glColor3f(1.0, 1.0, 1.0) #konokichur color set (RGB)
-    #call the draw methods here
-    
+   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+   glLoadIdentity()
+   iterate()
+   glColor3f(1.0, 1.0, 1.0)
 
-    string = 'WINNER'
-    
-    winner(string)
 
-    glutSwapBuffers()
+
+
+
+   result_1 = "YOU WIN"
+
+   result_2 = "LOST"
+
+   list(result_1)
+
+   distance = 0
+
+   for i in result_2:
+
+       output(i, distance)
+
+       distance += 60
+
+
+
+
+   glutSwapBuffers()
 
 
 
 glutInit()
 glutInitDisplayMode(GLUT_RGBA)
-glutInitWindowSize(500, 500) #window size
+glutInitWindowSize(500, 500)
 glutInitWindowPosition(0, 0)
-wind = glutCreateWindow(b"Student ID : ") #window name
+wind = glutCreateWindow(b"OpenGL Coding Practice")
 glutDisplayFunc(showScreen)
 
 glutMainLoop()
