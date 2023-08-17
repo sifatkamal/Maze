@@ -392,9 +392,6 @@ def output(value, x):
 
 
 
-
-
-
 # ===========================================================================
 
 
@@ -419,7 +416,7 @@ def showScreen():
 
    result_1 = "YOU WIN"
 
-   result_2 = "LOST"
+   result_2 = "YOU LOST"
 
    list(result_1)
 
