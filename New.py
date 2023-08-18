@@ -13,284 +13,172 @@ def draw_points(x, y):
     glEnd()
 
 
-
 # --------------------------------------WINNER MESSAGE--------------------------------------------------------------------------------
 
 def find_zone(dx, dy):
-
     if dx > -1 and dy > -1:
-
         if abs(dx) >= abs(dy):
-
             return 0
-
         else:
-
             return 1
-
     elif dx < 0 and dy > -1:
-
         if abs(dx) < abs(dy):
-
             return 2
-
         else:
-
             return 3
-
     elif dx < 0 and dy < 0:
-
         if abs(dx) >= abs(dy):
-
             return 4
-
         else:
-
             return 5
-
     else:
-
         if abs(dx) < abs(dy):
-
             return 6
-
         else:
-
             return 7
 
+
 def zone0_conversion(x1, y1, x2, y2, zone):
-
-
     if zone == 0:
-
         x1, y1 = x1, y1
-
         x2, y2 = x2, y2
-
     elif zone == 1:
-
         x1, y1 = y1, x1
-
         x2, y2 = y2, x2
-
-
-
     elif zone == 2:
-
         x1, y1 = y1, -x1
-
         x2, y2 = y2, -x2
-
-
-
-
     elif zone == 3:
-
         x1, y1 = -x1, y1
-
         x2, y2 = -x2, y2
-
-
-
     elif zone == 4:
-
         x1, y1 = -x1, -y1
-
         x2, y2 = -x2, -y2
-
-
-
     elif zone == 5:
-
         x1, y1 = -y1, -x1
-
         x2, y2 = -y2, -x2
-
-
     elif zone == 6:
-
         x1, y1 = -y1, x1
-
         x2, y2 = -y2, x2
-
-
     elif zone == 7:
-
         x1, y1 = x1, -y1
-
         x2, y2 = x2, -y2
-
     return x1, y1, x2, y2
 
 
-
 def DrawLine(x1, y1, x2, y2):
-
     dx = x2 - x1
-
     dy = y2 - y1
-
     zone = find_zone(dx, dy)
-
     x1, y1, x2, y2 = zone0_conversion(x1, y1, x2, y2, zone)
-
     X0 = []
-
     Y0 = []
-
     D = []
-
-
-
     dx = x2 - x1
-
     dy = y2 - y1
-
-    d = 2*dy-dx
-
-
-
+    d = 2 * dy - dx
     D = D + [d]
-
     incE = 2 * dy
-
     incNE = 2 * (dy - dx)
-
     x = x1
-
     y = y1
-
-
-    while x<=x2:
-
+    while x <= x2:
         tempx = x
-
         tempy = y
-
-        X0+=[x]
-
+        X0 += [x]
         Y0 += [y]
-
         tempx, tempy = convert_to_origin_zone(tempx, tempy, zone)
-
         draw_points(tempx, tempy)
-
-        x+=1
-
+        x += 1
         if (d > 0):
-
             d = d + incNE
-
             y = y + 1
-
         else:
-
             d = d + incE
+            D += [d]
 
-            D+=[d]
 
 def convert_to_origin_zone(x, y, zone):
-
     if zone == 0:
-
         return x, y
-
     elif zone == 1:
-
         return y, x
-
     elif zone == 2:
-
         return -y, x
-
     elif zone == 3:
-
         return -x, y
-
     elif zone == 4:
-
         return -x, -y
-
     elif zone == 5:
-
         return -y, -x
-
     elif zone == 6:
-
         return y, -x
-
     elif zone == 7:
-
         return x, -y
-
 
 
 # ===========================================================================
 
 
 def top(x):
+    DrawLine(x + 50, 400, x + 100, 400)
 
-  DrawLine(x+50, 400, x+100, 400)
 
 def mid(x):
+    DrawLine(x + 50, 350, x + 100, 350)
 
-  DrawLine(x+50, 350, x+100, 350)
 
 def bottom(x):
+    DrawLine(x + 50, 300, x + 100, 300)
 
-  DrawLine(x+50, 300, x+100, 300)
 
 def left_above(x):
+    DrawLine(x + 50, 400, x + 50, 350)
 
-  DrawLine(x+50, 400, x+50, 350)
 
 def left_bottom(x):
+    DrawLine(x + 50, 350, x + 50, 300)
 
-  DrawLine(x+50, 350, x+50, 300)
 
 def right_above(x):
+    DrawLine(x + 100, 400, x + 100, 350)
 
-  DrawLine(x+100, 400, x+100, 350)
 
 def right_bottom(x):
+    DrawLine(x + 100, 350, x + 100, 300)
 
-  DrawLine(x+100, 350, x+100, 300)
 
 def left_above_right_below(x):
+    DrawLine(x + 50, 400, x + 100, 300)
 
-  DrawLine(x+50, 400, x+100, 300)
 
 def diagonal_left(x):
+    DrawLine(x + 50, 300, x + 75, 400)
 
-  DrawLine(x+50, 300, x+75, 400)
 
 def diagonal_right(x):
-
-  DrawLine(x+100, 300, x+75, 400)
+    DrawLine(x + 100, 300, x + 75, 400)
 
 
 def diagonal_left_for_Y(x):
+    DrawLine(x + 50, 400, x + 75, 350)
 
-  DrawLine(x+50, 400, x+75, 350)
 
 def diagonal_right_for_Y(x):
+    DrawLine(x + 100, 400, x + 75, 350)
 
-  DrawLine(x+100, 400, x+75, 350)
 
+def mid_for_Y(x):
+    DrawLine(x + 75, 350, x + 75, 300)
 
-def mid_for_Y(x):  
-
-  DrawLine(x+75, 350, x+75, 300)
 
 def only_I(x):
-
-  DrawLine(x+75, 400, x+75, 300)
+    DrawLine(x + 75, 400, x + 75, 300)
 
 
 # Output
 
 def output(value, x):
-
     if value == "O":
 
         top(x)
@@ -316,7 +204,7 @@ def output(value, x):
         left_bottom(x)
 
         bottom(x)
-        
+
 
     elif value == "I":
 
@@ -334,11 +222,11 @@ def output(value, x):
 
         right_bottom(x)
 
-        
 
-        
 
-        
+
+
+
 
     elif value == "W":
 
@@ -352,10 +240,10 @@ def output(value, x):
 
         left_above(x)
 
-        left_bottom(x)                
+        left_bottom(x)
 
 
-# -----------------------------------------------
+    # -----------------------------------------------
 
     elif value == "Y":
 
@@ -377,7 +265,7 @@ def output(value, x):
 
         bottom(x)
 
-    
+
     elif value == "L":
 
         left_above(x)
@@ -393,77 +281,92 @@ def output(value, x):
         only_I(x)
 
 
-
-
 # --------------------------------------END WINNER MESSAGE--------------------------------------------------------------------------------
 
 
-def draw_background(x1, y1, x2, y2, x3, y3, x4, y4):
-    glColor3f(0, 0, 0.2)
-    glBegin(GL_QUADS)
-    glVertex2f(x1, y1)
-    glVertex2f(x2, y2)
-    glVertex2f(x3, y3)
-    glVertex2f(x4, y4)
-    glEnd()
 
+
+#  Function of glVertex2f
+# def draw_wall(x1, y1, x2, y2, x3, y3, x4, y4):
+#     glBegin(GL_QUADS)
+#     glVertex2f(x1, y1)
+#     glVertex2f(x2, y2)
+#     glVertex2f(x3, y3)
+#     glVertex2f(x4, y4)
+#     glEnd()
+
+
+
+#  Function of Mid Point Line
+def color_blocks(x1, y1, x2, x4, y4):
+    a = x2 - x1
+    for i in range(1, a):
+        DrawLine(x1+i, y1, x4+i, y4)
+    return DrawLine(x1, y1, x4, y4)
 
 def draw_wall(x1, y1, x2, y2, x3, y3, x4, y4):
-    glBegin(GL_QUADS)
-    glVertex2f(x1, y1)
-    glVertex2f(x2, y2)
-    glVertex2f(x3, y3)
-    glVertex2f(x4, y4)
-    glEnd()
+    color_blocks(x1, y1, x2, x4, y4)
+
+    DrawLine(x1, y1, x2, y2)
+    DrawLine(x2, y2, x3, y3)
+    DrawLine(x3, y3, x4, y4)
+    DrawLine(x4, y4, x1, y1)
 
 
+#  MAZE
 def draw_maze():
-    draw_background(1, 759, 759, 759, 759, 1, 1, 1)
+    glColor3f(0, 0, 0.2)
+    draw_wall(1, 759, 759, 759, 759, 1, 1, 1)
+
     glColor3f(0.5, 1, 1)
     draw_wall(60, 680, 80, 680, 80, 60, 60, 60)
     draw_wall(80, 80, 660, 80, 660, 60, 80, 60)
     draw_wall(120, 680, 660, 680, 660, 660, 120, 660)
-    draw_wall(640, 120, 640, 660, 660, 660, 660, 120)
-    draw_wall(140, 600, 120, 600, 120, 660, 140, 660)
+    draw_wall(640, 660, 660, 660, 660, 120, 640, 120)
+
+    draw_wall(120, 660, 140, 660, 140, 600, 120, 600)
     draw_wall(180, 620, 300, 620, 300, 600, 180, 600)
-    draw_wall(340, 560, 340, 620, 360, 620, 360, 560)
-    draw_wall(400, 600, 400, 620, 640, 620, 640, 600)
-    draw_wall(200, 540, 180, 540, 180, 600, 200, 600)
-    draw_wall(120, 540, 120, 560, 180, 560, 180, 540)
+    draw_wall(340, 620, 360, 620, 360, 560, 340, 560)
+    draw_wall(400, 620, 640, 620, 640, 600, 400, 600)
+    draw_wall(180, 600, 200, 600, 200, 540, 180, 540)
+    draw_wall(120, 560, 180, 560, 180, 540, 120, 540)
     draw_wall(120, 540, 140, 540, 140, 480, 120, 480)
-    draw_wall(140, 480, 140, 500, 480, 500, 480, 480)
-    draw_wall(480, 480, 480, 280, 460, 280, 460, 480)
-    draw_wall(240, 500, 240, 540, 260, 540, 260, 500)
-    draw_wall(240, 540, 240, 560, 540, 560, 540, 540)
-    draw_wall(540, 540, 540, 320, 520, 320, 520, 540)
+    draw_wall(140, 500, 260, 500, 260, 480, 140, 480)
+    draw_wall(300, 500, 480, 500, 480, 480, 300, 480)
+    draw_wall(460, 480, 480, 480, 480, 280, 460, 280)
+    draw_wall(240, 540, 260, 540, 260, 500, 240, 500)
+    draw_wall(240, 560, 400, 560, 400, 540, 240, 540)
+    draw_wall(440, 560, 540, 560, 540, 540, 440, 540)
+    draw_wall(520, 540, 540, 540, 540, 320, 520, 320)
     draw_wall(580, 560, 600, 560, 600, 440, 580, 440)
     draw_wall(540, 460, 580, 460, 580, 440, 540, 440)
-    draw_wall(180, 260, 180, 480, 200, 480, 200, 260)
-    draw_wall(120, 360, 120, 440, 140, 440, 140, 360)
-    draw_wall(240, 420, 240, 440, 420, 440, 420, 420)
+    draw_wall(180, 480, 200, 480, 200, 260, 180, 260)
+    draw_wall(120, 440, 140, 440, 140, 360, 120, 360)
+    draw_wall(240, 440, 420, 440, 420, 420, 240, 420)
     draw_wall(240, 420, 260, 420, 260, 300, 240, 300)
-    draw_wall(400, 200, 400, 420, 420, 420, 420, 200)
-    draw_wall(300, 360, 300, 380, 360, 380, 360, 360)
-    draw_wall(340, 160, 340, 360, 360, 360, 360, 160)
-    draw_wall(300, 300, 300, 320, 340, 320, 340, 300)
-    draw_wall(580, 280, 580, 400, 600, 400, 600, 280)
-    draw_wall(80, 300, 80, 320, 140, 320, 140, 300)
-    draw_wall(120, 240, 120, 260, 300, 260, 300, 240)
-    draw_wall(420, 260, 420, 280, 640, 280, 640, 260)
-    draw_wall(80, 180, 80, 200, 180, 200, 180, 180)
-    draw_wall(220, 180, 220, 200, 300, 200, 300, 180)
-    draw_wall(280, 120, 280, 180, 300, 180, 300, 120)
-    draw_wall(120, 120, 120, 140, 280, 140, 280, 120)
-    draw_wall(340, 80, 340, 100, 480, 100, 480, 80)
-    draw_wall(300, 140, 300, 160, 460, 160, 460, 140)
-    draw_wall(460, 140, 460, 220, 480, 220, 480, 140)
-    draw_wall(480, 200, 480, 220, 600, 220, 600, 200)
-    draw_wall(520, 80, 520, 160, 540, 160, 540, 80)
-    draw_wall(580, 80, 580, 160, 600, 160, 600, 80)
+    draw_wall(400, 420, 420, 420, 420, 200, 400, 200)
+    draw_wall(300, 380, 360, 380, 360, 360, 300, 360)
+    draw_wall(340, 360, 360, 360, 360, 160, 340, 160)
+    draw_wall(300, 320, 340, 320, 340, 300, 300, 300)
+    draw_wall(580, 400, 600, 400, 600, 280, 580, 280)
+    draw_wall(80, 320, 140, 320, 140, 300, 80, 300)
+    draw_wall(120, 260, 300, 260, 300, 240, 120, 240)
+    draw_wall(420, 280, 480, 280, 480, 260, 420, 260)
+    draw_wall(520, 280, 640, 280, 640, 260, 520, 260)
+    draw_wall(80, 200, 180, 200, 180, 180, 80, 180)
+    draw_wall(220, 200, 300, 200, 300, 180, 220, 180)
+    draw_wall(280, 180, 300, 180, 300, 120, 280, 120)
+    draw_wall(120, 140, 280, 140, 280, 120, 120, 120)
+    draw_wall(340, 100, 480, 100, 480, 80, 340, 80)
+    draw_wall(300, 160, 460, 160, 460, 140, 300, 140)
+    draw_wall(460, 220, 480, 220, 480, 140, 460, 140)
+    draw_wall(480, 220, 600, 220, 600, 200, 480, 200)
+    draw_wall(520, 160, 540, 160, 540, 80, 520, 80)
+    draw_wall(580, 160, 600, 160, 600, 80, 580, 80)
 
-    # finish line
-    glColor3f(1, 1, 1)  ### note to Anika.. ekhane checkered finish line banay dio please
-    draw_wall(640, 80, 640, 120, 680, 120, 680, 80)
+    glColor3f(0.8, 0, 0)
+    draw_wall(640, 120, 680, 120, 680, 80, 640, 80)
+
 
 # draw cricle
 def drawpoints(x, y):
@@ -555,7 +458,8 @@ def scale(r):
 x = 100
 y = 700
 radius = 12
-point=0
+point = 0
+
 
 def handle_key_press(key):
     global x, y, radius, point
@@ -571,31 +475,24 @@ def handle_key_press(key):
         elif pixel == b'\xff\xff\xff':
             x, y = 705, 100
             radius = scale(radius)
-            point=10
+            point = 10
 
             ######add winner function here ######
 
 
 def winner_lose_message(result):
-   
-   
+    #    result_1 = "YOU WIN"
 
+    #    result_2 = "YOU LOST"
 
-#    result_1 = "YOU WIN"
+    list(result)
 
-#    result_2 = "YOU LOST"
+    distance = 0
 
-   list(result)
+    for i in result:
+        output(i, distance)
 
-   distance = 0
-
-   for i in result:
-
-       output(i, distance)
-
-       distance += 60
-
-            
+        distance += 60
 
 
 def refresh_window(value):
@@ -636,6 +533,7 @@ def showScreen2():
 
     glutSwapBuffers()
 
+
 def showScreen3():
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glLoadIdentity()
@@ -648,9 +546,8 @@ def showScreen3():
 
     glutSwapBuffers()
 
+
 # ----------------------------------------------------------------------------------------------
-
-
 
 
 # ----------------------------------------------------------------------------------------------
@@ -677,8 +574,8 @@ wind = glutCreateWindow(b"Maze")
 glutDisplayFunc(showScreen)
 glutTimerFunc(0, refresh_window, 0)  # Start the refresh timer
 start_time = time.time()
-end_time = start_time + 10
-print("end",end_time)
+end_time = start_time + 2
+print("end", end_time)
 while True:
     current_time = time.time()
     if point == 10 and current_time < end_time:
@@ -695,6 +592,13 @@ while True:
     else:
         handle_key_events()
         glutMainLoopEvent()
+
+
+
+
+
+
+
 
 
 
